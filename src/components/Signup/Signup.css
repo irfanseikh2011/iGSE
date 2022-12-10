@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.signup {
+    display: flex;
+}
+
+.bg {
+    background: url(../../../public/bg.jpg);
+    height: 100vh;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 50vw;
+}
+
+.signup-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50vw;
+}
+
+.signup-input > input {
+    width: 600px;
+    height: 35px;
+    border: 0;
+    background: #EFF0F2;
+    padding-left: 10px;
+    margin-bottom:  20px ;
+    margin-top: 4px;
+}
