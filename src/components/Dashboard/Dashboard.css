@@ -1,0 +1,93 @@
+.dashboard-body {
+    display: flex;
+    height: 100vh;
+}
+
+.dashboard-aside {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    background-color: grey;
+}
+
+.dashboard-logo {
+    margin-bottom: 2.5em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.dashboard-aside-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-button {
+    font-size: 1rem;
+    padding: 0.5em 0;
+    margin-bottom: 0.2em;
+}
+
+.dashboard-button:hover{
+    cursor: pointer;
+    background-color: rgb(100, 94, 94);
+    color: white;
+}
+
+.dashboard-logout {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 70%;
+}
+
+.dashboard-main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.dashboard-main-profile-div {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5em;
+    background-color: lightgrey;
+}
+
+.identity-div {
+    display: flex;
+    align-items: center
+}
+
+.overview-avator {
+    background-color: aqua;
+    border-radius: 60%;
+    padding: 1em;
+    border: 4px solid rgb(255, 255, 255);
+    margin-right: 1em;
+}
+
+.dashboard-profile-details {
+    padding: 1.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.dashboard-detail {
+    display: flex;
+    margin-bottom: 0.5em;
+    width: 50%;
+}
+
+.dashboard-detail-data {
+    border: 1px solid grey;
+    width: 100%;
+    border-radius: 8px;
+}
+
+ .space-hidden {
+    visibility: hidden;
+} 

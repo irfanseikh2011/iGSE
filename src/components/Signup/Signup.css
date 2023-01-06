@@ -86,3 +86,15 @@
     border: none;
     color: rgb(90, 88, 88);
 }
+
+
+.signin-error-msg {
+    color: red;
+    font-size: 0.8rem;
+}
+
+
+.error-msg-hidden {
+    visibility: hidden;
+}
+
