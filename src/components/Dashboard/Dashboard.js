@@ -1,9 +1,35 @@
-import React from 'react'
+import React, { useEffect} from 'react'
 import './Dashboard.css'
 import logo from './bulb.png'
 import avator from './avator.png'
+import jwt from 'jsonwebtoken'
+import { useNavigate} from 'react-router-dom'
 
 const Dashboard = () => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if(token){
+      const user = jwt.decode(token);
+      if(!user) {
+        localStorage.removeItem('token');
+        navigate('/');
+      }
+    } else {
+      navigate('/');
+    } 
+  }, [])
+
+
+  const logoutFunc = () => {
+    localStorage.clear();
+    navigate('/');
+  }
+
+
+
   return (
     <div className='dashboard-body'>
       <div className='dashboard-aside'>
@@ -16,7 +42,7 @@ const Dashboard = () => {
             <button className='dashboard-button'>Topup Voucher</button>
           </div>
           <div className='dashboard-logout'>
-            <button className='dashboard-button'>LOGOUT</button>
+            <button onClick={logoutFunc} className='dashboard-button'>LOGOUT</button>
           </div>
       </div>
       <div className='dashboard-main'>
