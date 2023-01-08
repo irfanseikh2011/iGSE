@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState , useRef } from 'react'
 import './Signup.css'
 import {useNavigate } from 'react-router-dom'
+import { QrReader } from 'react-qr-reader'
+
 
 
 const Signup = () => {
@@ -12,10 +14,15 @@ const Signup = () => {
   const [propertyType, setPropertyType] = useState();
   const [numberOfRooms, setnumberOfRooms] = useState();
   const [balance, setBalance] = useState();
+  const [qrCode, setQrCode] = useState("");
+  const [Scan,setScan] = useState(false); 
+  const reader = useRef();
 
   const navigateToLogin = () => {
     navigate('/signin')
   }
+
+
 
 
 
@@ -76,6 +83,7 @@ const Signup = () => {
     setBalance(() => e.target.value);
   }
 
+
   return (
     <div className='signup'>
       <div className='bg'></div>
@@ -111,7 +119,22 @@ const Signup = () => {
         </div>
         <div className='signup-input'>
           <p>Energy Voucher Code</p>
-          <input onChange={(e)=> handleCode(e)} placeholder='Enter a valid 8-digit EV Code'/>
+          <input value={qrCode} onChange={(e)=> handleCode(e)} placeholder='Enter a valid 8-digit EV Code'/>
+          <div className={Scan ? "qrReader" : "hidden qrReader"} >
+          {Scan ? (<QrReader style={{ width: "100%" }} onResult={(res,err) => {
+            if(res){
+              setQrCode(res.text);
+              setBalance(() => res.text);
+              setScan(false)
+            } 
+            if(err)
+            {
+              console.info(err)
+            }
+          }}/>) : <></>}
+          </div>
+       
+          <br/><button className='create-button scan-button' onClick={()=> Scan ? setScan(false) : setScan(true)}>{Scan ? "Stop Scanning" : "Scan Code"}</button>
         </div>
         <button onClick={registerUser} className='create-button'>Create Account</button>
         <p>Already have an account ? <span className='login-hover' onClick={navigateToLogin}><a>Log in</a></span></p>  

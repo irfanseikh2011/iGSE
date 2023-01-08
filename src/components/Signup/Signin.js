@@ -29,17 +29,18 @@ const Signin = () => {
         })
     
         const data = await res.json();
+
     
         if(data.user){
           localStorage.setItem('token', data.user);
           setIsValidUser(true);
-          navigate('/dashboard');
+          navigate('/dashboard',{state: {data: data.userData}});
         } else {
           setSignInTry((prev) => prev + 1);
         }
-    
-        console.log(data)
+
       }
+
 
       const handleEmail = (e) => {
         setcustomerID(() => e.target.value);
