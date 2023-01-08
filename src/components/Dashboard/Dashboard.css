@@ -91,3 +91,7 @@
  .space-hidden {
     visibility: hidden;
 } 
+
+.admin-pic {
+    background-color: rgb(250, 96, 96);
+}

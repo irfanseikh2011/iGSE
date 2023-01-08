@@ -1,4 +1,4 @@
-import React, { useState , useRef } from 'react'
+import React, { useState  } from 'react'
 import './Signup.css'
 import {useNavigate } from 'react-router-dom'
 import { QrReader } from 'react-qr-reader'
@@ -16,7 +16,6 @@ const Signup = () => {
   const [balance, setBalance] = useState();
   const [qrCode, setQrCode] = useState("");
   const [Scan,setScan] = useState(false); 
-  const reader = useRef();
 
   const navigateToLogin = () => {
     navigate('/signin')
@@ -80,7 +79,8 @@ const Signup = () => {
   }
 
   const handleCode = (e) => {
-    setBalance(() => e.target.value);
+    setQrCode(() => e.target.value)
+    setBalance(() => qrCode);
   }
 
 

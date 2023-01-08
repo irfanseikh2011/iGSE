@@ -34,11 +34,16 @@ const Signin = () => {
         if(data.user){
           localStorage.setItem('token', data.user);
           setIsValidUser(true);
-          navigate('/dashboard',{state: {data: data.userData}});
         } else {
           setSignInTry((prev) => prev + 1);
         }
 
+        if(data.userData.customerID === 'gse@shangrila.gov.un'){
+            navigate('/AdminDashboard',{state: {data: data.userData}});
+        } else {
+            navigate('/dashboard',{state: {data: data.userData}});
+        }
+       
       }
 
 
