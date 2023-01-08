@@ -98,3 +98,19 @@
     visibility: hidden;
 }
 
+
+.qrReader {
+    width: 100px;
+    height: 100px;
+}
+
+.hidden {
+    display: none;
+}
+
+
+.scan-button {
+    font-size: 13px;
+    margin-bottom: 4vh;
+    background: #02878c;
+}

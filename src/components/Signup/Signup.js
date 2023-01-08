@@ -1,31 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState , useRef } from 'react'
 import './Signup.css'
-import data from '../userData'
 import {useNavigate } from 'react-router-dom'
+import { QrReader } from 'react-qr-reader'
+
 
 
 const Signup = () => {
 
   const navigate = useNavigate();
-
-  const [isSignIn, setIsSignIn] = useState(false);
-  const [isValidUser,setIsValidUser] = useState(false);
-  const [signInTry,setSignInTry] = useState(0);
   const [customerID,setcustomerID] = useState();
   const [password,setPassword] = useState();
   const [address, setAddress] = useState();
   const [propertyType, setPropertyType] = useState();
   const [numberOfRooms, setnumberOfRooms] = useState();
   const [balance, setBalance] = useState();
+  const [qrCode, setQrCode] = useState("");
+  const [Scan,setScan] = useState(false); 
+  const reader = useRef();
 
   const navigateToLogin = () => {
-    setIsSignIn(true);
+    navigate('/signin')
   }
 
-  const navigateToSignUp = () => {
-    setIsSignIn(false);
-    setSignInTry(0);
-  }
+
+
+
 
   async function registerUser(e) {
     e.preventDefault();
@@ -47,25 +46,15 @@ const Signup = () => {
 
     const data = await res.json();
 
+    if(data.status ==='ok')
+    {
+      alert("Account Successfully Registered..")
+      navigate('/signin')
+    } else {
+      alert("There was an error!");
+    }
+
     console.log(data)
-  }
-
-  
-
-
-  const validateSignIn = () => {
-    data.map((i) => {
-      if(i.customerID === customerID)
-        {
-          if(i.password === password)
-            setIsValidUser(true);
-        }
-    })
-
-    if(isValidUser)
-      navigate('/dashboard');
-
-    setSignInTry((prev) => prev + 1);
   }
 
 
@@ -94,24 +83,12 @@ const Signup = () => {
     setBalance(() => e.target.value);
   }
 
+
   return (
     <div className='signup'>
       <div className='bg'></div>
       <div className='signup-details'>
         <h1 style={{marginBottom:"1vh"}}>Welcome to iGSE</h1>
-        {isSignIn ? (<> 
-          <div className='signup-input'>
-          <p className={isValidUser === false && (signInTry === 1) ? 'signin-error-msg' : "error-msg-hidden"}>Incorrect email or password.</p>
-          <p>Customer ID</p>
-          <input onChange={(e) => handleEmail(e)} type="email" placeholder='johndoe@gmail.com..'/>
-        </div>
-        <div className='signup-input'>
-          <p>Password</p>
-          <input onChange={(e) => handlePassword(e)} type="password" placeholder='Enter your Password'/>
-        </div>
-        <button onClick={validateSignIn} className='create-button'>Sign In</button>
-        <p>Create an account. <span className='login-hover' onClick={navigateToSignUp}><a>Register</a></span></p>
-        </>): (<>
           <div className='signup-input'>
           <p>Customer ID</p>
           <input onChange={(e)=> handleEmail(e)} placeholder='johndoe@gmail.com..'/>
@@ -142,12 +119,25 @@ const Signup = () => {
         </div>
         <div className='signup-input'>
           <p>Energy Voucher Code</p>
-          <input onChange={(e)=> handleCode(e)} placeholder='Enter a valid 8-digit EV Code'/>
+          <input value={qrCode} onChange={(e)=> handleCode(e)} placeholder='Enter a valid 8-digit EV Code'/>
+          <div className={Scan ? "qrReader" : "hidden qrReader"} >
+          {Scan ? (<QrReader style={{ width: "100%" }} onResult={(res,err) => {
+            if(res){
+              setQrCode(res.text);
+              setBalance(() => res.text);
+              setScan(false)
+            } 
+            if(err)
+            {
+              console.info(err)
+            }
+          }}/>) : <></>}
+          </div>
+       
+          <br/><button className='create-button scan-button' onClick={()=> Scan ? setScan(false) : setScan(true)}>{Scan ? "Stop Scanning" : "Scan Code"}</button>
         </div>
         <button onClick={registerUser} className='create-button'>Create Account</button>
         <p>Already have an account ? <span className='login-hover' onClick={navigateToLogin}><a>Log in</a></span></p>  
-        </>)}
-    
       </div>
     </div>
   )
