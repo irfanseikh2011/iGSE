@@ -30,7 +30,12 @@
 
 .dashboard-button:hover{
     cursor: pointer;
-    background-color: rgb(100, 94, 94);
+    background-color: rgb(143, 135, 135);
+    color: white;
+}
+
+.active-but {
+    background-color: rgb(114, 106, 106);
     color: white;
 }
 

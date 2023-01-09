@@ -62,11 +62,11 @@ const Dashboard = () => {
       <div className='dashboard-aside'>
           <div className='dashboard-logo'><img style={{width:"50px",margin:"10px"}} alt="logo" src={logo}/><h2> iGSE </h2></div>
           <div className='dashboard-aside-buttons'>
-            <button onClick={profile} className='dashboard-button'>Profile</button>
-            <button onClick={submitReading} className='dashboard-button'>Submit Reading</button>
-            <button onClick={viewBill} className='dashboard-button'>View Bill</button>
-            <button onClick={payBill} className='dashboard-button'>Pay Bill</button>
-            <button onClick={topupVoucher} className='dashboard-button'>Topup Voucher</button>
+            <button onClick={profile} className={view==='profile' ? 'dashboard-button active-but': 'dashboard-button'}>Profile</button>
+            <button onClick={submitReading} className={view==='reading' ? 'dashboard-button active-but': 'dashboard-button'}>Submit Reading</button>
+            <button onClick={viewBill} className={view==='viewbill' ? 'dashboard-button active-but': 'dashboard-button'}>View Bill</button>
+            <button onClick={payBill} className={view==='paybill' ? 'dashboard-button active-but': 'dashboard-button'}>Pay Bill</button>
+            <button onClick={topupVoucher} className={view==='topup' ? 'dashboard-button active-but': 'dashboard-button'}>Topup Voucher</button>
           </div>
           <div className='dashboard-logout'>
             <button onClick={logoutFunc} className='dashboard-button'>LOGOUT</button>
@@ -82,7 +82,7 @@ const Dashboard = () => {
             <div className='space-hidden'>space</div>
             <div className='space-hidden'>space</div>
          </div>
-         {view === 'profile' ? <Profile data={data} /> : view === 'viewbill' ? <Bill/> : view === 'reading' ? <MeterReading/> : view === 'topup' ? <Topup/> : view === 'paybill' ? <PayBill/> : ''}
+         {view === 'profile' ? <Profile data={data} /> : view === 'viewbill' ? <Bill data={data}/> : view === 'reading' ? <MeterReading data={data}/> : view === 'topup' ? <Topup data={data}/> : view === 'paybill' ? <PayBill/> : ''}
         {/* //  <div className='dashboard-profile-details'>
         //     <div className='dashboard-detail'><h3>Username: </h3><h3 className='dashboard-detail-data'>{data.customerID}</h3></div>
         //     <div className='dashboard-detail'><h3>Address: </h3><h3 className='dashboard-detail-data'>{data.address}</h3></div>

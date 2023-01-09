@@ -7,7 +7,9 @@ const User = new mongoose.Schema({
     address: {type:String, required: true},
     propertyType : {type:String, required: true},
     numberOfRooms : {type:Number , required: true},
-    balance: {type: Number, required: true}
+    balance: {type: Number, required: true},
+    // outstanding: {type: Number, required:true, default: 0},
+    bills: [{type: mongoose.Schema.Types.ObjectId, ref:'Bill'}]
 }, {collection: "Users"})
 
 

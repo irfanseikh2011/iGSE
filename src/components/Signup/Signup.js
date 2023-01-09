@@ -11,7 +11,7 @@ const Signup = () => {
   const [customerID,setcustomerID] = useState();
   const [password,setPassword] = useState();
   const [address, setAddress] = useState();
-  const [propertyType, setPropertyType] = useState();
+  const [propertyType, setPropertyType] = useState('Detached');
   const [numberOfRooms, setnumberOfRooms] = useState();
   const [balance, setBalance] = useState();
   const [qrCode, setQrCode] = useState("");
@@ -80,7 +80,7 @@ const Signup = () => {
 
   const handleCode = (e) => {
     setQrCode(() => e.target.value)
-    setBalance(() => qrCode);
+    setBalance(() => e.target.value);
   }
 
 
