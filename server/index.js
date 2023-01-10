@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const User = require('./models/users.model')
 const bcrypt = require('bcrypt');
 const Bill = require('./models/bill.model')
-const Rate = require('./models/rates.model')
+const Rate = require('./models/rates.model');
+const { differenceInCalendarDays, parseISO } = require('date-fns');
 
 app.use(cors());
 app.use(express.json())
@@ -73,6 +74,19 @@ app.post('/api/submitreading', async (req,res) => {
             date : req.body.date,
             user: customer._id
         })
+
+        const latestBill = await Bill.findOne({user:customer._id}).sort({date: -1});
+        const currDate = parseISO(req.body.date)
+
+        const dateDifference = (differenceInCalendarDays(currDate, latestBill.date))
+
+        if(dateDifference < 0){
+            res.json({status:"error",message:"Date cannot be prior to the previous reading date", code:"dateMismatch"})
+        }
+
+        if(prevBill.dayElectricity > req.body.dayElectricity || prevBill.nightElectricity > req.body.nightElectricity || prevBill.gas > req.body.gas){
+            res.json({status:"error",message:"Latest readings cannot be less than previous readings.",code:"readingsMismatch"})
+        }
 
         if(prevBill === null){
             const bill = await Bill.create({
@@ -185,6 +199,34 @@ app.get('/api/getRates', async(req,res) => {
     }
 }
 )
+
+
+app.put('/api/updateOustanding', async(req,res) => {
+    try {
+        const userId = await User.findOne({customerID:req.body.customerID});
+        const prevBill = await Bill.findOne({user:userId._id}).sort({date: -1}).skip(1);
+        const currBill = await Bill.findOne({user:userId._id}).sort({date: -1})
+        const rates = await Rate.findOne({});
+
+
+        const day = (currBill.dayElectricity - prevBill.dayElectricity) * rates.dayRate;
+        const night = (currBill.nightElectricity - prevBill.nightElectricity) * rates.nightRate;
+        const gas = (currBill.gas - prevBill.gas) * rates.gas;
+      
+
+        const days = differenceInCalendarDays(currBill.date,prevBill.date);
+        const standing = rates.standingRate * days;
+
+
+        const outstanding = day + night + gas + standing;
+        const calculate = await User.findByIdAndUpdate(userId._id, {outstanding: outstanding});
+
+        res.json({data: calculate})
+
+    } catch (e) {
+        res.json({status:e})
+    }
+})
 
 
 

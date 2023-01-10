@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 
 const Bill = ({data}) => {
   const id = data.customerID;
-    
+    console.log(data)
   const [date, setDate] = useState();
   const [dayElectricity, setdayElectricity] = useState();
   const [nightElectricity, setnightElectricity] = useState();
   const [gas,setGas] = useState();
   const [rates,setRates] = useState();
+  const [outstanding,setOutstanding] = useState(data.outstanding);
 
   async function getBill() {
     try {
@@ -72,7 +73,7 @@ const Bill = ({data}) => {
             <h2>Day Electricity Reading : {dayElectricity}</h2>
             <h2>Night Electricity Reading : {nightElectricity}</h2>
             <h2>Gas Reading : {gas}</h2>
-            <h2>Total outstanding = </h2>
+            <h2>Total outstanding = £{outstanding}</h2>
         </div>
     </div>
   )

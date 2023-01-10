@@ -12,12 +12,12 @@ const MeterReading = ({data}) => {
 
 
  const user = data.customerID;
+ const customerID = data.customerID;
 
 
 
-
- async function submitReading(e){
-    e.preventDefault();
+ async function submitReading(){
+    // e.preventDefault();
 
     try {
         const res = await fetch('http://localhost:1337/api/submitreading', {
@@ -37,8 +37,15 @@ const MeterReading = ({data}) => {
 
     const data = await res.json();
 
-    alert("Readings Submitted Successfully")
-    console.log(data)
+    if(data.code === 'dateMismatch'){
+        alert(data.message);
+    }else if(data.code === 'readingsMismatch'){
+        alert(data.message)
+    }else {
+        alert("Readings Submitted Successfully")
+    }
+
+    // console.log(data)
     } catch {
         alert("Something went wrong")
     }
@@ -46,6 +53,26 @@ const MeterReading = ({data}) => {
 
     console.log(data);
    
+  }
+
+
+  async function calculateOutstanding(){
+    try{
+        const response = await fetch('http://localhost:1337/api/updateOustanding', {
+        method: 'PUT',
+        headers: {
+            'Content-Type' : 'application/json',
+        },
+        body : JSON.stringify({
+        customerID
+      })
+    })
+
+        const result = await response.json();
+        console.log("added outstanding",result);
+    }catch(e){
+        console.log(e);
+    }
   }
 
 
@@ -65,6 +92,11 @@ const MeterReading = ({data}) => {
     setGas(() => e.target.value);
   }
 
+  const handleSubmit=(e) => {
+    e.preventDefault();
+    submitReading();
+    calculateOutstanding();
+  }
 
 
   return (
@@ -81,7 +113,7 @@ const MeterReading = ({data}) => {
             <input onChange={handleNightElec} type='number' /><span> kWh</span>
             <h3>Gas Consumption :</h3>
             <input onChange={handleGas} type="number" /><span> kWh</span><br></br>
-            <button onClick={(e) => submitReading(e)}>Submit Reading</button>
+            <button onClick={(e) => handleSubmit(e)}>Submit Reading</button>
         </div>
 
     </div>
