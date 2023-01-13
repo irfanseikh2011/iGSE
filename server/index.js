@@ -70,44 +70,44 @@ app.post('/api/submitreading', async (req,res) => {
 
     try {
 
-        const prevBill = await Bill.findOne({
-            date : req.body.date,
-            user: customer._id
-        })
+        const prevBill = await Bill.findOne({user:customer._id}).sort({date: -1});
 
-        const latestBill = await Bill.findOne({user:customer._id}).sort({date: -1});
-        const currDate = parseISO(req.body.date)
+        if(prevBill!==null){
+            const currDate = parseISO(req.body.date)
+            const dateDifference = (differenceInCalendarDays(currDate, prevBill.date))
+            
+            if(dateDifference <= 0){
+                res.json({status:"error",message:"Date cannot be prior or same to the previous reading date", code:"dateMismatch"})
+            }
 
-        const dateDifference = (differenceInCalendarDays(currDate, latestBill.date))
+             else if(prevBill.dayElectricity > req.body.dayElectricity || prevBill.nightElectricity > req.body.nightElectricity || prevBill.gas > req.body.gas){
+                res.json({status:"error",message:"Latest readings cannot be less than previous readings.",code:"readingsMismatch"})
+            }
+            else {
+                const bill = await Bill.create({
+                    date : req.body.date,
+                    dayElectricity : req.body.dayElectricity,
+                    nightElectricity : req.body.nightElectricity,
+                    gas: req.body.gas,
+                    user: customer._id
+                })
+                res.json({status:"ok", message:"created"});
+                console.log(bill)
+            }
+        } else {
 
-        if(dateDifference < 0){
-            res.json({status:"error",message:"Date cannot be prior to the previous reading date", code:"dateMismatch"})
-        }
-
-        if(prevBill.dayElectricity > req.body.dayElectricity || prevBill.nightElectricity > req.body.nightElectricity || prevBill.gas > req.body.gas){
-            res.json({status:"error",message:"Latest readings cannot be less than previous readings.",code:"readingsMismatch"})
-        }
-
-        if(prevBill === null){
             const bill = await Bill.create({
                 date : req.body.date,
                 dayElectricity : req.body.dayElectricity,
                 nightElectricity : req.body.nightElectricity,
                 gas: req.body.gas,
-                user: customer._id.toString()
+                user: customer._id
             })
             res.json({status:"ok", message:"created"});
             console.log(bill)
-        } else {
-            const updatedBill = await Bill.findOneAndUpdate({date : req.body.date},
-                {
-                    dayElectricity: req.body.dayElectricity,
-                    nightElectricity : req.body.nightElectricity,
-                    gas: req.body.gas,
-                })
-            res.json({status:"ok", message:"updated"})
-            console.log(updatedBill)
-        } 
+
+        }
+
     } catch (e) {
         res.json({status: "error", user: customer})
     }
@@ -204,7 +204,7 @@ app.get('/api/getRates', async(req,res) => {
 app.put('/api/updateOustanding', async(req,res) => {
     try {
         const userId = await User.findOne({customerID:req.body.customerID});
-        const prevBill = await Bill.findOne({user:userId._id}).sort({date: -1}).skip(1);
+        const prevBill = await Bill.findOne({user:userId._id}).sort({date: 1})
         const currBill = await Bill.findOne({user:userId._id}).sort({date: -1})
         const rates = await Rate.findOne({});
 
@@ -225,6 +225,34 @@ app.put('/api/updateOustanding', async(req,res) => {
 
     } catch (e) {
         res.json({status:e})
+    }
+})
+
+
+app.put('/api/paybill', async (req,res) => {
+    try {
+        const userId = await User.findOne({customerID:req.body.customerID});
+        
+        if(userId.outstanding > 0)
+        {
+            Bill.find().sort({_id: 1}).exec(async (err, allDocs) => {
+                if(err) throw err;
+                let lastDoc = allDocs.pop();
+                await Bill.deleteMany({ _id: { $ne: lastDoc._id } }).exec();
+            });
+
+            const updatedBalance =  Number.parseFloat(userId.balance - userId.outstanding).toFixed(2);
+            const updatedUser = await User.findOneAndUpdate(userId._id, {outstanding: 0, balance: updatedBalance});
+            res.json({status:"ok", message: updatedUser})
+        }
+
+        else {
+            res.json({status:"ok",message: "No outstanding"})
+        }
+
+        
+    } catch(e) {
+        res.json({status:"error", message:e})
     }
 })
 

@@ -14,7 +14,7 @@ const Signin = () => {
         setSignInTry(0);
       }
 
-      async function loginUsers(e){
+       async function loginUsers(e){
         e.preventDefault();
     
         const res = await fetch('http://localhost:1337/api/login', {

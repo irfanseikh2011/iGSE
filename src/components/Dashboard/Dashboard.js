@@ -82,7 +82,7 @@ const Dashboard = () => {
             <div className='space-hidden'>space</div>
             <div className='space-hidden'>space</div>
          </div>
-         {view === 'profile' ? <Profile data={data} /> : view === 'viewbill' ? <Bill data={data}/> : view === 'reading' ? <MeterReading data={data}/> : view === 'topup' ? <Topup data={data}/> : view === 'paybill' ? <PayBill/> : ''}
+         {view === 'profile' ? <Profile data={data} /> : view === 'viewbill' ? <Bill data={data}/> : view === 'reading' ? <MeterReading data={data}/> : view === 'topup' ? <Topup data={data}/> : view === 'paybill' ? <PayBill data={data}/> : ''}
         {/* //  <div className='dashboard-profile-details'>
         //     <div className='dashboard-detail'><h3>Username: </h3><h3 className='dashboard-detail-data'>{data.customerID}</h3></div>
         //     <div className='dashboard-detail'><h3>Address: </h3><h3 className='dashboard-detail-data'>{data.address}</h3></div>

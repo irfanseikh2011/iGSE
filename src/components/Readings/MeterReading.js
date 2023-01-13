@@ -19,7 +19,11 @@ const MeterReading = ({data}) => {
  async function submitReading(){
     // e.preventDefault();
 
-    try {
+    if(dayElectricity===undefined || nightElectricity===undefined || gas===undefined)
+    {
+      alert("Readings are empty, please fill in the form");
+    }else{
+      try {
         const res = await fetch('http://localhost:1337/api/submitreading', {
       method: 'POST',
       headers: {
@@ -52,7 +56,7 @@ const MeterReading = ({data}) => {
     
 
     console.log(data);
-   
+    }
   }
 
 

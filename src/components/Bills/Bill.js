@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 
 const Bill = ({data}) => {
   const id = data.customerID;
-    console.log(data)
   const [date, setDate] = useState();
   const [dayElectricity, setdayElectricity] = useState();
   const [nightElectricity, setnightElectricity] = useState();
@@ -42,6 +41,22 @@ const Bill = ({data}) => {
     }
   } 
 
+  async function getOutstanding(){
+    try {
+      const res = await fetch(`http://localhost:1337/api/profile/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type' : 'application/json',
+          },
+        })
+
+        let data = await res.json();
+        setOutstanding(() => data.data.outstanding)
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
 
   async function getRates() {
     try {
@@ -64,6 +79,7 @@ const Bill = ({data}) => {
   useEffect(()=> {
     getBill();
     getRates();
+    getOutstanding();
   },[])
 
   return (
