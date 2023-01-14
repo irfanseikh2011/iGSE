@@ -13,6 +13,9 @@ const { differenceInCalendarDays, parseISO } = require('date-fns');
 app.use(cors());
 app.use(express.json())
 
+// mongoose.set('debug', function (coll, method, query, doc) {
+//     console.log(coll + '.' + method, JSON.stringify(query), doc);
+//   });
 mongoose.connect('mongodb://localhost:27017/users')
 
 function generateCode() {
@@ -340,6 +343,106 @@ app.get('/igse/propertycount', async (req,res) => {
         res.json(data);
     }catch(e) {
         res.json({status: e})
+    }
+})
+
+
+app.get('/igse/:propertyType/:bedroom',async (req,res) => {
+
+    const numberOfRoom = (req.params.bedroom);
+    const property = (req.params.propertyType)
+    try {
+
+        const Rates = await Rate.findOne({});
+
+        const dayRate = Rates.dayRate;
+        const nightRate = Rates.nightRate;
+        const gasRate = Rates.gas;
+        const StandingRate = Rates.standingRate;
+
+
+
+        const bills = await User.aggregate([
+            {
+                $lookup: {
+                    from: "Bill",
+                    localField: "_id",
+                    foreignField: "user",
+                    as: "bills"
+                }
+            },
+            {
+                $unwind: "$bills"
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    customerID: { $first: "$customerID" },
+                    password: { $first: "$password" },
+                    address: { $first: "$address" },
+                    propertyType: { $first: "$propertyType" },
+                    numberOfRooms: { $first: "$numberOfRooms" },
+                    balance: { $first: "$balance" },
+                    outstanding: { $first: "$outstanding" },
+                    latestBill: { $last: "$bills" },
+                    firstBill: { $first: "$bills" },
+                }
+            },
+            {
+                $match: { propertyType:property }
+            },
+            {
+                $match: {  numberOfRooms: numberOfRoom}
+            },
+            {
+                $group: {
+                    _id: null,
+                    numberOfRooms: { $first: "$numberOfRooms" },
+                    averageDay: {$avg: "$latestBill.dayElectricity"},
+                    averageNight: {$avg: "$latestBill.nightElectricity"},
+                    averageGas: {$avg: "$latestBill.gas"},
+                    averageDays : {
+                        $avg: {
+                            $divide : [
+                                { 
+                                    $subtract: ["$latestBill.date", "$firstBill.date"] 
+                                },
+                                {
+                                    $literal: 86400000
+                                }
+                            ]
+                        }
+                    }
+                    
+                }
+            },
+        ])
+
+        if(bills.length === 0){
+            return res.json({status:"empty", message: "No such category exists"})
+        }
+        
+
+        const day = (bills[0].averageDay) * dayRate;
+        console.log(day);
+        const night =(bills[0].averageNight) * nightRate;
+        console.log(night);
+        const gas = (bills[0].averageGas) * gasRate;
+        console.log(gas);
+        const average_cost = (day+night+gas)/bills[0].averageDays + (StandingRate * bills[0].averageDays)
+        console.log(average_cost);
+
+
+        const data = {
+            "type": req.params.propertyType,
+            "bedroom": req.params.bedroom,
+            "average_electricity_gas_cost_per_day": Number.parseFloat(average_cost).toFixed(2),
+            "unit" : "pound"
+        }
+
+        res.json(data);
+    } catch(e){
+        res.json(e);
     }
 })
 

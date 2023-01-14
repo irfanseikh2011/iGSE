@@ -92,6 +92,7 @@ const Signup = () => {
   }
 
 
+
   return (
     <div className='signup'>
       <div className='bg'></div>
@@ -133,7 +134,7 @@ const Signup = () => {
             if(res){
               setQrCode(res.text);
               setBalance(() => res.text);
-              setScan(false)
+              // setScan(false)
             } 
             if(err)
             {
@@ -142,7 +143,7 @@ const Signup = () => {
           }}/>) : <></>}
           </div>
        
-          <br/><button className='create-button scan-button' onClick={()=> Scan ? setScan(false) : setScan(true)}>{Scan ? "Stop Scanning" : "Scan Code"}</button>
+          <br/><button className='create-button scan-button' onClick={()=> Scan ? setScan(false) : setScan(true)} >{Scan ? "Stop Scanning" : "Scan Code"}</button>
         </div>
         <button onClick={registerUser} className='create-button'>Create Account</button>
         <p>Already have an account ? <span className='login-hover' onClick={navigateToLogin}><a>Log in</a></span></p>  
@@ -152,3 +153,5 @@ const Signup = () => {
 }
 
 export default Signup
+
+

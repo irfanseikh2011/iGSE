@@ -6,7 +6,7 @@ const User = new mongoose.Schema({
     password: {type:String, required: true},
     address: {type:String, required: true},
     propertyType : {type:String, required: true},
-    numberOfRooms : {type:Number , required: true},
+    numberOfRooms : {type:String , required: true},
     balance: {type: Number, required: true},
     outstanding: {type: Number, required:true, default: 0},
     bills: [{type: mongoose.Schema.Types.ObjectId, ref:'Bill'}]
