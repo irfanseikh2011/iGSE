@@ -46,19 +46,37 @@ const Topup = ({data}) => {
     const recharge = async (e) => {
         e.preventDefault();
 
-      const res = await fetch('http://localhost:1337/api/topup', {
-      method: 'POST',
-      headers: {
-        'Content-Type' : 'application/json',
-      },
-      body : JSON.stringify({
-        customerID,
-        qrCode,
+        try{
+          const res = await fetch('http://localhost:1337/api/topup', {
+          method: 'POST',
+          headers: {
+            'Content-Type' : 'application/json',
+          },
+          body : JSON.stringify({
+          customerID,
+          qrCode,
+        })
       })
-    }).then(data => data.json())
-    .then(res => {
+    
+        const data = await res.json();
+
+        if(data.status === 'Coupon Code Expired'){
+          alert("Coupon Code Expired");
+        }else if(data.status === 'Coupon Code is Invalid'){
+          alert("Coupon Code is Invalid");
+        }
         getProfile();
-    }) 
+        } catch(e) {
+          console.log(e);
+        }
+
+      
+
+    
+    // .then(data => data.json())
+    // .then(res => {
+    //     getProfile();
+    // }) 
 
     console.log(data)
   }

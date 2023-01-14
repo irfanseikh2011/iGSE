@@ -37,9 +37,9 @@ const AdminDashboard = () => {
       <div className='dashboard-aside'>
           <div className='dashboard-logo'><img style={{width:"50px",margin:"10px"}} alt="logo" src={logo}/><h2> iGSE</h2></div>
           <div className='dashboard-aside-buttons'>
+            <button className='dashboard-button'>Statistics</button>
             <button className='dashboard-button'>Set Unit Price</button>
             <button className='dashboard-button'>View Bills</button>
-            <button className='dashboard-button'>Statistics</button>
           </div>
           <div className='dashboard-logout'>
             <button onClick={logoutFunc} className='dashboard-button'>LOGOUT</button>

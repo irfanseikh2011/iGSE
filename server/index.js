@@ -7,6 +7,7 @@ const User = require('./models/users.model')
 const bcrypt = require('bcrypt');
 const Bill = require('./models/bill.model')
 const Rate = require('./models/rates.model');
+const QRCode = require('./models/qrcode.model');
 const { differenceInCalendarDays, parseISO } = require('date-fns');
 
 app.use(cors());
@@ -14,21 +15,32 @@ app.use(express.json())
 
 mongoose.connect('mongodb://localhost:27017/users')
 
+function generateCode() {
+    var code = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  
+    for (var i = 0; i < 8; i++)
+      code += possible.charAt(Math.floor(Math.random() * possible.length));
+  
+    return code;
+  }
+
 app.post('/api/register', async (req,res) => {
-    console.log(req.body);
-    const validCodes = ['DM8LEESR','XTX2GZAD','NDA7SY2V','RVA7DZ2D']
-    var newBalance = 0
-    console.log(validCodes.includes(req.body.balance))
-    if(validCodes.includes(req.body.balance))
-        {
-            newBalance = 200;
-        }
+    
     try {
+        const ValidCode = await QRCode.findOne({code:req.body.balance})
+        const prevUser = await User.findOne({customerID:req.body.customerID});
 
+        if(prevUser !== null){
+            return res.json({status:"error",message:"CustomerID exists"})
+        }
+        if(ValidCode === null){
+        return res.json({status:"Error", message:"Code Invalid"});
+       } else if(ValidCode.expired === true) {
+        return res.json({status:"Error", message:"Code Expired"});
+       }else {
+        var newBalance = 200;
         const securedPassword = await bcrypt.hash(req.body.password, 10);
-       
-        console.log(newBalance);
-
         const user = await User.create({
             customerID : req.body.customerID,
             password : securedPassword,
@@ -37,8 +49,12 @@ app.post('/api/register', async (req,res) => {
             numberOfRooms: req.body.numberOfRooms,
             balance:newBalance
         });
-        res.json({status:"ok"});
+
+        const codes = await QRCode.findOneAndUpdate(ValidCode._id,{expired:true})
+
+        res.json({status:"ok",message:"Account Created."});
         console.log(user)
+       }
     } catch(err){
         res.json({status:"Error"})
     }    
@@ -117,20 +133,27 @@ app.post('/api/submitreading', async (req,res) => {
 
 
 app.post('/api/topup', async (req,res) => {
-
-    const user = await User.findOne({customerID:req.body.customerID});
-     
-    let AvailBalance = user.balance;
-    const validCodes = ['DM8LEESR','XTX2GZAD','NDA7SY2V','RVA7DZ2D']
-    if(validCodes.includes(req.body.qrCode))
-        {
-            AvailBalance = AvailBalance + 200;
-        }
     try {
-        const user = await User.findOneAndUpdate({
-            customerID: req.body.customerID
-        }, {balance: AvailBalance})
-        res.json({status:"updated balance", data: user})
+
+        const userID = await User.findOne({customerID:req.body.customerID});
+        const ValidCode = await QRCode.findOne({code:req.body.qrCode})
+        let AvailBalance = userID.balance;
+
+        if(ValidCode!== null && ValidCode.expired === true){
+            res.json({status:"Coupon Code Expired"});
+        }
+        else if(ValidCode!== null)
+        {
+                AvailBalance = AvailBalance + 200;
+                const user = await User.findOneAndUpdate({
+                    customerID: req.body.customerID
+                }, {balance: AvailBalance})
+
+                const codes = await QRCode.findOneAndUpdate(ValidCode._id,{expired:true})
+                res.json({status:"updated balance", data: user})
+        } else {
+            res.json({status:"Coupon Code is Invalid"});
+        } 
     } catch {
         res.json({status:"error"});
     }
@@ -253,6 +276,70 @@ app.put('/api/paybill', async (req,res) => {
         
     } catch(e) {
         res.json({status:"error", message:e})
+    }
+})
+
+
+app.post('/api/generateCode', async (req,res) => {
+    try {
+        const qrCode = generateCode();
+        const prevCode = await QRCode.findOne({code: qrCode});
+
+        while(prevCode == qrCode){
+            qrCode = generateCode();
+        }
+
+        const Code = await QRCode.create({
+            code : qrCode,
+        })
+        res.json({status:"ok",message:"Created new qrCode", data:Code})
+    } catch(e) {
+        res.json({status:"Error",message:"Something went wrong"})
+    }
+})
+
+
+app.get('/igse/propertycount', async (req,res) => {
+    try {
+       
+        
+        const Terraced = await User.where('propertyType').equals('terraced').countDocuments()
+        const detached = await User.where('propertyType').equals('detached').countDocuments()
+        const Semidetached = await User.where('propertyType').equals('semi-detached').countDocuments()
+        const Flat = await User.where('propertyType').equals('flat').countDocuments()
+        const Cottage = await User.where('propertyType').equals('cottage').countDocuments()
+        const Bungalow = await User.where('propertyType').equals('bungalow').countDocuments()
+        const Mansion = await User.where('propertyType').equals('mansion').countDocuments()
+
+       
+
+        const data = [
+            {
+            "Terraced" : Terraced
+            },
+            {
+            "detached" : detached
+            },
+           {
+            "Semidetached" : Semidetached
+           },
+           {
+            "Flat" : Flat
+           },
+           {
+            "Cottage" : Cottage
+           },
+           {
+            "Bungalow" : Bungalow
+           },
+           {
+            "Mansion" : Mansion
+           }
+        ]
+
+        res.json(data);
+    }catch(e) {
+        res.json({status: e})
     }
 })
 

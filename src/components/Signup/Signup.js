@@ -27,6 +27,10 @@ const Signup = () => {
 
   async function registerUser(e) {
     e.preventDefault();
+    console.log(numberOfRooms)
+    if(customerID === "" || password === "" || address === "" || numberOfRooms === "" || balance === "" ){
+      return alert("The form is incomplete");
+    }
 
     const res = await fetch('http://localhost:1337/api/register', {
       method: 'POST',
@@ -49,6 +53,10 @@ const Signup = () => {
     {
       alert("Account Successfully Registered..")
       navigate('/signin')
+    }else if(data.message === "Code Invalid"){
+      alert("Code is Invalid");
+    } else if(data.message === "Code Expired"){
+      alert("Code is Expired");
     } else {
       alert("There was an error!");
     }
