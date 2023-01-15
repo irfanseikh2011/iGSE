@@ -16,7 +16,7 @@ const AdminDashboard = () => {
   const {data} = state;
 
 
-  const [view,setView] = useState();
+  const [view,setView] = useState('statistics');
 
 
   useEffect(() => {
@@ -62,10 +62,10 @@ const AdminDashboard = () => {
       <div className='dashboard-aside'>
           <div className='dashboard-logo'><img style={{width:"50px",margin:"10px"}} alt="logo" src={logo}/><h2> iGSE</h2></div>
           <div className='dashboard-aside-buttons'>
-            <button onClick={statistics} className='dashboard-button'>Statistics</button>
-            <button onClick={unitPrice} className='dashboard-button'>Set Unit Price</button>
-            <button onClick={viewBills} className='dashboard-button'>View Bills</button>
-            <button onClick={generateCode} className='dashboard-button'>Generate Voucher Codes</button>
+            <button onClick={statistics} className={view==='statistics' ? 'dashboard-button active-but': 'dashboard-button'}>Statistics</button>
+            <button onClick={unitPrice} className={view==='unitPrice' ? 'dashboard-button active-but': 'dashboard-button'}>Set Unit Price</button>
+            <button onClick={viewBills} className={view==='viewBills' ? 'dashboard-button active-but': 'dashboard-button'}>View Bills</button>
+            <button onClick={generateCode} className={view==='generateCode' ? 'dashboard-button active-but': 'dashboard-button'}>Generate Voucher Codes</button>
           </div>
           <div className='dashboard-logout'>
             <button onClick={logoutFunc} className='dashboard-button'>LOGOUT</button>

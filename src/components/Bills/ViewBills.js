@@ -38,7 +38,7 @@ const ViewBills = () => {
           {loading ? (<></>) : (<> <div className='all-bill-container'>
             {bills.map(item => (
                 <div key={item.id}>
-                  <div className='customer-details'><h2>CustomerID: {item.customerID} </h2> <h2>Outstanding: £{item.outstanding ? item.outstanding : "0"}</h2></div>
+                  <div className='customer-details'><h2>CustomerID: {item.customerID} </h2> <h2>Outstanding: £{item.outstanding ? Number.parseFloat(item.outstanding).toFixed(2) : "0"}</h2></div>
                     <div className="customer-readings">
                         {item.bills.map((subItem,i )=> (
                             <div key={subItem.id}>

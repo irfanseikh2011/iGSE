@@ -436,7 +436,6 @@ app.get('/igse/propertycount', async (req,res) => {
             "Mansion" : Mansion
            }
         ]
-
         res.json(data);
     }catch(e) {
         res.json({status: e})
