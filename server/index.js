@@ -545,6 +545,50 @@ app.get('/igse/:propertyType/:bedroom',async (req,res) => {
 
 
 
+app.get('/api/getAllBills',async (req,res) => {
+    try {
+        const bills = await User.aggregate([
+            {
+                $lookup: {
+                    from: "Bill",
+                    localField: "_id",
+                    foreignField: "user",
+                    as: "bills"
+                }
+            },
+            {
+                $unwind: "$bills"
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    customerID: { $first: "$customerID" },
+                    password: { $first: "$password" },
+                    address: { $first: "$address" },
+                    propertyType: { $first: "$propertyType" },
+                    numberOfRooms: { $first: "$numberOfRooms" },
+                    balance: { $first: "$balance" },
+                    outstanding: { $first: "$outstanding" },
+                    bills: {$push: "$bills"},
+                 
+                }
+            }
+          ])
+
+        console.log(bills)
+          
+        if(bills.length !== 0){
+            return res.json({status: "ok", data: bills})
+        } else {
+            return res.json({status:"ok", message: "Empty Directory"})
+        }
+    } catch (e) {
+        return res.json(e);
+    }
+})
+
+
+
 
 app.listen(1337, () => {
     console.log("Server started at 1337");

@@ -1,0 +1,41 @@
+.scrolable {
+    overflow: scroll;
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.all-bill-container {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(79, 161, 189);
+    border: 3px solid grey;
+    border-radius: 6px;
+    height: 90%;
+    width: 100%
+}
+
+.customer-details {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid rgb(248, 217, 217);
+    color: white;
+}
+
+
+.customer-readings {
+    border-bottom: 3px solid rgb(248, 217, 217);
+}
+
+.customer-reading-details {
+    display: flex;
+    justify-content: baseline;
+    font-size: 1.4rem;
+    border-bottom: 2px solid rgb(248, 217, 217);
+}
+
+.reading-data {
+    border-right: 2px solid rgb(248, 217, 217);
+    font-size: 25px;
+}
