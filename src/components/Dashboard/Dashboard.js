@@ -3,7 +3,7 @@ import './Dashboard.css'
 import logo from './bulb.png'
 import avator from './avator.png'
 import jwt from 'jsonwebtoken'
-import { useNavigate, useLocation} from 'react-router-dom'
+import { useNavigate, useLocation, redirect} from 'react-router-dom'
 import Profile from '../Profile/Profile'
 import Bill from '../Bills/Bill'
 import MeterReading from '../Readings/MeterReading'
@@ -19,14 +19,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if(token){
+
+    if(data === undefined || state === null){
+      redirect('/signin');
+    }
+
+    else if(token){
       const user = jwt.decode(token);
       if(!user) {
         localStorage.removeItem('token');
-        navigate('/');
+        redirect('/signin');;
       }
     } else {
-      navigate('/');
+      redirect('/signin');
     } 
   }, [])
 

@@ -1,15 +1,23 @@
-import React, { useEffect} from 'react'
+import React, { useEffect, useState} from 'react'
 import './Dashboard.css'
 import logo from './bulb.png'
 import avator from './avator.png'
 import jwt from 'jsonwebtoken'
 import { useNavigate, useLocation} from 'react-router-dom'
+import Statistics from '../Statistics/Statistics'
+import SetPrice from '../SetPrice/SetPrice'
+import ViewBills from '../Bills/ViewBills'
+import GenerateCode from '../GenerateCode/GenerateCode'
 
 const AdminDashboard = () => {
 
   const navigate = useNavigate();
   const {state} = useLocation();
   const {data} = state;
+
+
+  const [view,setView] = useState();
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -31,15 +39,33 @@ const AdminDashboard = () => {
   }
 
 
+  const statistics = () => {
+    setView(() => "statistics")
+  }
+
+  const unitPrice = () => {
+    setView(() => "unitPrice")
+  }
+
+  const viewBills = () => {
+    setView(() => "viewBills")
+  }
+
+  const generateCode = () => {
+    setView(() => "generateCode")
+  }
+
+
 
   return (
     <div className='dashboard-body'>
       <div className='dashboard-aside'>
           <div className='dashboard-logo'><img style={{width:"50px",margin:"10px"}} alt="logo" src={logo}/><h2> iGSE</h2></div>
           <div className='dashboard-aside-buttons'>
-            <button className='dashboard-button'>Statistics</button>
-            <button className='dashboard-button'>Set Unit Price</button>
-            <button className='dashboard-button'>View Bills</button>
+            <button onClick={statistics} className='dashboard-button'>Statistics</button>
+            <button onClick={unitPrice} className='dashboard-button'>Set Unit Price</button>
+            <button onClick={viewBills} className='dashboard-button'>View Bills</button>
+            <button onClick={generateCode} className='dashboard-button'>Generate Voucher Codes</button>
           </div>
           <div className='dashboard-logout'>
             <button onClick={logoutFunc} className='dashboard-button'>LOGOUT</button>
@@ -55,13 +81,8 @@ const AdminDashboard = () => {
             <div className='space-hidden'>space</div>
             <div className='space-hidden'>space</div>
          </div>
-         {/* <div className='dashboard-profile-details'>
-            <div className='dashboard-detail'><h3>Username: </h3><h3 className='dashboard-detail-data'>ADMIN</h3></div>
-            <div className='dashboard-detail'><h3>Address: </h3><h3 className='dashboard-detail-data'>{data.address}</h3></div>
-            <div className='dashboard-detail'><h3>Property Type: </h3><h3 className='dashboard-detail-data'>{data.propertyType}</h3></div>
-            <div className='dashboard-detail'><h3>Number of Rooms: </h3><h3 className='dashboard-detail-data'>{data.numberOfRooms}</h3></div>
-            <div className='dashboard-detail'><h3>Total Credits Left: </h3><h3 className='dashboard-detail-data'>£{data.balance}</h3></div>
-         </div> */}
+        
+         {view === 'statistics' ? <Statistics /> : view === 'unitPrice' ? <SetPrice/> : view === 'viewBills' ? <ViewBills/> :  view === 'generateCode' ? <GenerateCode/> : ''}
 
       </div>
     </div>

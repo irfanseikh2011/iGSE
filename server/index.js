@@ -187,6 +187,8 @@ app.get('/api/getBill/:id', async (req,res) => {
 })
 
 app.post('/api/postRate', async(req,res) => {
+
+    console.log(req.body.property)
     try {
 
         const prevRate = await Rate.findOne({});
@@ -198,22 +200,96 @@ app.post('/api/postRate', async(req,res) => {
                 gas : req.body.gas,
                 standingRate : req.body.standingRate
             })
-            res.json({status:"ok",message:"Created new rate", data:rate})
+            return res.json({status:"ok",message:"Created new rate", data:rate})
         } else {
-           console.log(prevRate.dayRate)
-            const rate = await Rate.findOneAndUpdate({_id: prevRate._id},
-                {
-                dayRate : req.body.dayRate,
-                nightRate : req.body.nightRate,
-                gas : req.body.gas,
-                standingRate : req.body.standingRate
-                })
-            res.json({status:"ok",message:"updated the rate",rates: rate})
+        //    console.log(prevRate.dayRate)
+            if(req.body.type === "day"){
+               const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{dayRate : req.body.property})
+               return res.json({status:"ok",message:"updated the rate",rates: rate})
+            } else if(req.body.type === "night"){
+                const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{nightRate : req.body.property})
+                return res.json({status:"ok",message:"updated the rate",rates: rate})
+            } else if(req.body.type === "gas"){
+                const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{gas : req.body.property})
+                return res.json({status:"ok",message:"updated the rate",rates: rate})
+            } else {
+                const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{standingRate : req.body.property})
+                return res.json({status:"ok",message:"updated the rate",rates: rate})
+            }
         }
     } catch(e) {
         res.json({error: e});
     }
 })
+
+
+app.post('/api/postDayRate', async(req,res) => {
+
+    try {
+        const prevRate = await Rate.findOne({});
+
+        if(prevRate !== null){
+               const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{dayRate : req.body.dayRate})
+               return res.json({status:"ok",message:"updated the rate",rates: rate})
+        }else {
+            res.json({status:"ok", message: "No rates present"})
+        }
+    } catch(e) {
+        res.json({error: e});
+    }
+})
+
+
+app.post('/api/postNightRate', async(req,res) => {
+
+    try {
+        const prevRate = await Rate.findOne({});
+
+        if(prevRate !== null){
+               const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{nightRate : req.body.nightRate})
+               return res.json({status:"ok",message:"updated the rate",rates: rate})
+        } else {
+            res.json({status:"ok", message: "No rates present"})
+        }
+    } catch(e) {
+        res.json({error: e});
+    }
+})
+
+
+app.post('/api/postGasRate', async(req,res) => {
+
+    try {
+        const prevRate = await Rate.findOne({});
+
+        if(prevRate !== null){
+               const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{gas : req.body.gas})
+               return res.json({status:"ok",message:"updated the rate",rates: rate})
+        }else {
+            res.json({status:"ok", message: "No rates present"})
+        }
+    } catch(e) {
+        res.json({error: e});
+    }
+})
+
+
+app.post('/api/postStandingRate', async(req,res) => {
+
+    try {
+        const prevRate = await Rate.findOne({});
+
+        if(prevRate !== null){
+               const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{standingRate : req.body.standingRate})
+               return res.json({status:"ok",message:"updated the rate",rates: rate})
+        }else {
+            res.json({status:"ok", message: "No rates present"})
+        }
+    } catch(e) {
+        res.json({error: e});
+    }
+})
+
 
 
 app.get('/api/getRates', async(req,res) => {
@@ -298,6 +374,27 @@ app.post('/api/generateCode', async (req,res) => {
         res.json({status:"ok",message:"Created new qrCode", data:Code})
     } catch(e) {
         res.json({status:"Error",message:"Something went wrong"})
+    }
+})
+
+
+app.get('/api/countCodes', async (req, res) => {
+    try {
+        const codes = await QRCode.countDocuments({expired: false});
+
+        res.json({count: codes});
+    } catch(e) {
+        res.json({e});
+    }
+})
+
+app.get('/api/countExpiredCodes', async (req, res) => {
+    try {
+        const codes = await QRCode.countDocuments({expired: true});
+
+        res.json({count: codes});
+    } catch(e) {
+        res.json({e});
     }
 })
 
