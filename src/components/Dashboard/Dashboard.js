@@ -65,7 +65,7 @@ const Dashboard = () => {
   return (
     <div className='dashboard-body'>
       <div className='dashboard-aside'>
-          <div className='dashboard-logo'><img style={{width:"50px",margin:"10px"}} alt="logo" src={logo}/><h2> iGSE </h2></div>
+          <div className='dashboard-logo'><img style={{width:"50px",margin:"10px"}} alt="logo" src={logo}/><h2 className='igse'> iGSE </h2></div>
           <div className='dashboard-aside-buttons'>
             <button onClick={profile} className={view==='profile' ? 'dashboard-button active-but': 'dashboard-button'}>Profile</button>
             <button onClick={submitReading} className={view==='reading' ? 'dashboard-button active-but': 'dashboard-button'}>Submit Reading</button>
@@ -73,15 +73,16 @@ const Dashboard = () => {
             <button onClick={payBill} className={view==='paybill' ? 'dashboard-button active-but': 'dashboard-button'}>Pay Bill</button>
             <button onClick={topupVoucher} className={view==='topup' ? 'dashboard-button active-but': 'dashboard-button'}>Topup Voucher</button>
           </div>
-          <div className='dashboard-logout'>
-            <button onClick={logoutFunc} className='dashboard-button'>LOGOUT</button>
-          </div>
+          {/* <div className='dashboard-logout'>
+            <button onClick={logoutFunc} className='dashboard-button'>Logout</button>
+          </div> */}
       </div>
       <div className='dashboard-main'>
          <div className='dashboard-main-profile-div'>
             <div className='space-hidden'>space</div>
             <div className='identity-div'><div className='overview-avator'><img src={avator} alt="avator"/></div>
-            <div className='overview-name'><h3>{data.customerID}</h3></div></div>
+            <div className='overview-name'><h3>{data.customerID}</h3><h4 className='logout-link' onClick={logoutFunc}>Logout</h4></div></div>
+            
             <div className='space-hidden'>space</div>
             <div className='space-hidden'>space</div>
             <div className='space-hidden'>space</div>

@@ -82,6 +82,12 @@ const SetPrice = () => {
 
         e.preventDefault();
 
+        
+
+        if(dayRate === ''){
+            return alert("Please enter day rate before changing.")
+        }
+
         const res = await fetch('http://localhost:1337/api/postDayRate', {
             method: 'POST',
             headers: {
@@ -104,6 +110,12 @@ const SetPrice = () => {
 
 
     const handleNightChange = async (e) => {
+
+        if(nightRate === undefined){
+            return alert("Please enter night rate before changing.")
+        }
+
+
 
         e.preventDefault();
         const res = await fetch('http://localhost:1337/api/postNightRate', {
@@ -129,6 +141,10 @@ const SetPrice = () => {
 
 
     const handleGasChange = async (e) => {
+
+        if(gas === undefined){
+            return alert("Please enter gas rate before changing.")
+        }
 
         e.preventDefault();
 
@@ -156,6 +172,10 @@ const SetPrice = () => {
 
 
     const handleStandingChange = async (e) => {
+
+        if(standingRate === undefined ){
+            return alert("Please enter standing rate before changing.")
+        }
 
         e.preventDefault();
         const res = await fetch('http://localhost:1337/api/postStandingRate', {
@@ -192,21 +212,33 @@ const SetPrice = () => {
 
 
   return (
-    <div>
-        <div>
-            <h2>Current Electricity Day Rate : {rates[0]}</h2>
-            <h2>Current Electricity Night Rate : {rates[1]}</h2>
-            <h2>Current Gas Rate : {rates[2]}</h2>
-            <h2>Current Standing Rate : {rates[3]}</h2>
-            <button onClick={changeRates}>{change[1]===1 ? 'X':'Change Rates'}</button>
+    <div className='container'>
+        <div className='price-container'>
+            <div className='container-details'>
+            <div> <h2 className='price-data'>Day Rate </h2> <h2 className='price-data'>£{rates[0]}</h2></div>
+            <div><h2 className='price-data'>Night Rate </h2><h2 className='price-data'>£{rates[1]}</h2></div>
+            <div><h2 className='price-data'>Gas Rate </h2><h2 className='price-data'>£{rates[2]}</h2></div>
+            <div> <h2 className='price-data'>Standing Rate </h2> <h2 className='price-data last-rate'>£{rates[3]}</h2></div>
+            <div className='button-container'>
+                <button className={change[1]===1 ? 'change-rate red':'change-rate'} onClick={changeRates}>{change[1]===1 ? 'X':'Change Rates'}</button>
+            </div>
+           
             <div className={change[0]==true ? "displayRates":"hiddenRates"}>
                 <h3>New Rates</h3>
-                <input onChange={handleDay} placeholder='Enter the new Day rates'/><br></br> <button onClick={(e) => handleDayChange(e)}>Change</button><br></br>
-                <input onChange={handleNight} placeholder='Enter the new Night rates'/><br></br><button onClick={(e) => handleNightChange(e)}>Change</button><br></br>
-                <input onChange={handleGas} placeholder='Enter the new Gas rates'/><br></br><button onClick={(e) =>handleGasChange(e)}>Change</button><br></br>
-                <input onChange={handleStanding} placeholder='Enter the new Standing rates'/><br></br><button onClick={(e) =>handleStandingChange(e)}>Change</button><br></br>
+                <div className='flex-input'>
+                <input className='rate-input' onChange={handleDay} placeholder='Enter the new Day rates'/><button className='changeButton' onClick={(e) => handleDayChange(e)}>Change</button>
+                </div>
+                <div className='flex-input'><input className='rate-input' onChange={handleNight} placeholder='Enter the new Night rates'/><button className='changeButton' onClick={(e) => handleNightChange(e)}>Change</button></div>
+                <div className='flex-input'><input className='rate-input' onChange={handleGas} placeholder='Enter the new Gas rates'/><button className='changeButton' onClick={(e) =>handleGasChange(e)}>Change</button></div>
+                <div className='flex-input'><input className='rate-input' onChange={handleStanding} placeholder='Enter the new Standing rates'/><button className='changeButton' onClick={(e) =>handleStandingChange(e)}>Change</button></div>
+                
                 {/* <button onClick={postRates}>Change </button> */}
             </div>
+
+            </div>
+            
+           
+           
         </div>
     </div>
   )

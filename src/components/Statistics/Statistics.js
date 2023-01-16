@@ -31,6 +31,9 @@ const Statistics = () => {
     const [avgCost,setAvgCost] = useState();
 
 
+    const [isLoaded,setIsLoaded] = useState(false);
+
+
     var dummyData =  {
         labels: ['Terraced', 'Detached', 'Semi-detached', 'Flat', 'Cottage', 'Bungalow','Mansion'],
         datasets: [{
@@ -104,7 +107,7 @@ const Statistics = () => {
 
         setTimeout(() => {
             setLoading(false);
-        },200);
+        },400);
     },[])
 
 
@@ -130,6 +133,7 @@ const Statistics = () => {
           let resp = await res.json();
 
           setAvgCost(() => resp.average_electricity_gas_cost_per_day);
+          setIsLoaded(true);
     }
     
 
@@ -179,7 +183,7 @@ const Statistics = () => {
         </div>
 
         <button onClick={getCost} className='check-cost'>Check Cost</button>
-        {avgCost? ( <div>
+        {isLoaded === false?(<></>) : avgCost ? ( <div>
             <h3 className='cost-result'>The Average cost is £ {avgCost}</h3>
         </div>) : (<>
             <h3 className='cost-result red'>Category does not exist {avgCost}</h3>

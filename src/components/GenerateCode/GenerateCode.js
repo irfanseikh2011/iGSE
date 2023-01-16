@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import './generateCode.css'
+
 const GenerateCode = () => {
 
     const [active,setActive] = useState();
@@ -56,12 +58,14 @@ const GenerateCode = () => {
 
 
   return (
-    <div>
-        <div>
+    <div className='container-background'>
+        <div className='container-outer'>
+            <div className='code-container'>
             <h2>Generate new Voucher Code.</h2>
             <h3>Active Voucher Codes = {active}</h3>
             <h3>Expired Voucher Codes = {expired}</h3>
-            <button onClick={generate}>Generate</button>
+            <button className='generate-but' onClick={generate}>Generate</button>
+            </div>
         </div>
     </div>
   )

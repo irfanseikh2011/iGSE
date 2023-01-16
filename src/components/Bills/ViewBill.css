@@ -2,6 +2,13 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    
+   
+}
+
+.scrollable-outer{
+    background-color: #eff0f3;
+    height: 100%;
 }
 
 .all-bill-container {

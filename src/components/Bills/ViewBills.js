@@ -31,7 +31,7 @@ const ViewBills = () => {
 
 
   return (
-    <div>
+    <div className='scrollable-outer'>
       <div className='scrolable'>
         <div>
           <h1>ALL ELECTRICITY BILLS:</h1>
