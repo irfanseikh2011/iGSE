@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import './bill.css'
 
 const Bill = ({data}) => {
   const id = data.customerID;
@@ -51,7 +52,7 @@ const Bill = ({data}) => {
         })
 
         let data = await res.json();
-        setOutstanding(() => data.data.outstanding)
+        setOutstanding(() => Number.parseFloat(data.data.outstanding).toFixed(2))
     } catch(e) {
       console.log(e);
     }
@@ -83,13 +84,15 @@ const Bill = ({data}) => {
   },[])
 
   return (
-    <div>
-        <div>
-            <h2>Meter Reading Date: {date}</h2>
+    <div className='background'>
+        <div className='bill-outer-container'>
+          <div className='bill-container'>
+          <h2>Meter Reading Date: {date}</h2>
             <h2>Day Electricity Reading : {dayElectricity}</h2>
             <h2>Night Electricity Reading : {nightElectricity}</h2>
             <h2>Gas Reading : {gas}</h2>
             <h2>Total outstanding = £{outstanding}</h2>
+          </div>
         </div>
     </div>
   )

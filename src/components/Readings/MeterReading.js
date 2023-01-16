@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './readings.css'
 
 const MeterReading = ({data}) => {
 
@@ -104,21 +105,26 @@ const MeterReading = ({data}) => {
 
 
   return (
-    <div>
+    <div className='background'>
+      <div className='readings-outer-container'>
+        
+        <div className='reading-container'>
         <div>
-            <h2>Submit Your Electricty and Gas Readings.</h2>
+            <h2>Submit Your Electricty and Gas Readings</h2>
         </div>
-        <div>
             <h3>Submission Date: </h3>
             <input onChange={handleDate} type="date" defaultValue={dateString}/>
             <h3>Electricity Consumption during day : </h3>
-            <input onChange={handleDayElec} type="number"/><span> kWh</span>
+            <div className='inside-input'><input onChange={handleDayElec} type="number"/><h4 className='kwh'> kWh</h4></div>
             <h3>Electricity Consumption during night : </h3>
-            <input onChange={handleNightElec} type='number' /><span> kWh</span>
+            <div className='inside-input'> <input onChange={handleNightElec} type='number' /><h4 className='kwh'> kWh</h4></div>
+           
             <h3>Gas Consumption :</h3>
-            <input onChange={handleGas} type="number" /><span> kWh</span><br></br>
-            <button onClick={(e) => handleSubmit(e)}>Submit Reading</button>
+            <div className='inside-input'><input onChange={handleGas} type="number" /><h4 className='kwh'> kWh</h4></div>
+            
+            <button className='reading-but' onClick={(e) => handleSubmit(e)}>Submit Reading</button>
         </div>
+      </div>
 
     </div>
   )

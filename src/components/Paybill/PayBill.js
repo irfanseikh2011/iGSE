@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import './paybill.css'
 
 const PayBill = ({data}) => {
 
@@ -60,11 +61,13 @@ useEffect(()=> {
 
 
   return (
-    <div>
-      <div>
+    <div className='background'>
+      <div className='paybill-outer-container'>
+        <div className='paybill-container'>
         <h2>Your Balance is : £{balance}</h2>
-        <h2>Your outstanding is : £{outstanding}</h2>
-        <button onClick={handlePayNow}>Pay Now</button>
+        <h2>Your outstanding is : £{Number.parseFloat(outstanding).toFixed(2)}</h2>
+        <button className='pay-but' onClick={handlePayNow}>Pay Now</button>
+        </div>
       </div>
     </div>
   )

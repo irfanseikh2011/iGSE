@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { QrReader } from 'react-qr-reader';
+import './topup.css'
 
 
 
@@ -84,12 +85,14 @@ const Topup = ({data}) => {
 
 
   return (
-    <div>
-        <div>
-            <h2>Current Balance: £{balance}</h2>
+    <div className='background'>
+        <div className='topup-outer-container'>
+          <div className='topup-container'>
+          <h2>Current Balance: £{balance}</h2>
             <h3>Top up your account</h3>
-            <input value={qrCode} onChange={(e)=> handleCode(e)} placeholder='Enter a valid 8-digit EV Code'/>
-            <button onClick={handleButton}>{topUp ? 'Close' : 'Scan QR'}</button>
+            <div className='topup-input-detail'> <input className='topup-input' value={qrCode} onChange={(e)=> handleCode(e)} placeholder='Enter a valid 8-digit EV Code'/>
+            <button className='topup-but' onClick={handleButton}>{topUp ? 'Close' : 'Scan QR'}</button></div>
+           
           <div className={topUp ? "qrReader" : "hidden qrReader"} >
           {topUp ? (<QrReader style={{ width: "100%" }} onResult={(res,err) => {
             if(res){
@@ -103,7 +106,9 @@ const Topup = ({data}) => {
           }}/>) : <></>}
           </div>
 
-          <button onClick={recharge}>Recharge</button>
+          <button className='recharge-but' onClick={recharge}>Recharge</button>
+          </div>
+           
         </div>
     </div>
   )

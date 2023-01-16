@@ -1,0 +1,27 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid grey;
+    width: 30%;
+    height: 50vh;
+    padding: 2em;
+    align-items: stretch;
+    justify-content: space-around;
+    border-radius: 6px;
+    background-color: white;
+}
+
+.profile-outer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5em;
+}
+
+
+.dashboard-detail-data {
+    border: 1px solid grey;
+    padding: 0.5em;
+    margin-left: -0.6em;
+    margin-top: 0.5em;
+}
