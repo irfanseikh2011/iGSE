@@ -331,18 +331,20 @@ app.put('/api/updateOustanding', async(req,res) => {
 })
 
 
+
 app.put('/api/paybill', async (req,res) => {
     try {
         const userId = await User.findOne({customerID:req.body.customerID});
         
         if(userId.outstanding > 0)
         {
-            Bill.find().sort({_id: 1}).exec(async (err, allDocs) => {
-                if(err) throw err;
-                let lastDoc = allDocs.pop();
-                await Bill.deleteMany({ _id: { $ne: lastDoc._id } }).exec();
-            });
+            const bills = await Bill.aggregate([
+                { $match: { user: userId._id } },
+                { $sort: { date: -1 } },
+                { $group: { _id: "$user", lastBill: { $first: "$$ROOT" } } }
+            ])
 
+            const deleted = await Bill.deleteMany({ user: userId._id, _id: { $ne: bills[0].lastBill._id } })
             const updatedBalance =  Number.parseFloat(userId.balance - userId.outstanding).toFixed(2);
             const updatedUser = await User.findOneAndUpdate(userId._id, {outstanding: 0, balance: updatedBalance});
             res.json({status:"ok", message: updatedUser})
@@ -404,7 +406,7 @@ app.get('/igse/propertycount', async (req,res) => {
        
         
         const Terraced = await User.where('propertyType').equals('terraced').countDocuments()
-        const detached = await User.where('propertyType').equals('detached').countDocuments()
+        const detached = await User.where('propertyType').equals('Detached').countDocuments()
         const Semidetached = await User.where('propertyType').equals('semi-detached').countDocuments()
         const Flat = await User.where('propertyType').equals('flat').countDocuments()
         const Cottage = await User.where('propertyType').equals('cottage').countDocuments()

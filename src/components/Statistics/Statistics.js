@@ -101,6 +101,7 @@ const Statistics = () => {
             
     }
 
+    console.log(chartData)
 
     useEffect(() => {
         getPropertyCount()
