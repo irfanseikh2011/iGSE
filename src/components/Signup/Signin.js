@@ -14,7 +14,7 @@ const Signin = () => {
         setSignInTry(0);
       }
 
-      async function loginUsers(e){
+       async function loginUsers(e){
         e.preventDefault();
     
         const res = await fetch('http://localhost:1337/api/login', {
@@ -34,11 +34,16 @@ const Signin = () => {
         if(data.user){
           localStorage.setItem('token', data.user);
           setIsValidUser(true);
-          navigate('/dashboard',{state: {data: data.userData}});
         } else {
           setSignInTry((prev) => prev + 1);
         }
 
+        if(data.userData.customerID === 'gse@shangrila.gov.un'){
+            navigate('/AdminDashboard',{state: {data: data.userData}});
+        } else {
+            navigate('/dashboard',{state: {data: data.userData}});
+        }
+       
       }
 
 

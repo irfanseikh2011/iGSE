@@ -1,4 +1,4 @@
-import React, { useState , useRef } from 'react'
+import React, { useState  } from 'react'
 import './Signup.css'
 import {useNavigate } from 'react-router-dom'
 import { QrReader } from 'react-qr-reader'
@@ -11,12 +11,11 @@ const Signup = () => {
   const [customerID,setcustomerID] = useState();
   const [password,setPassword] = useState();
   const [address, setAddress] = useState();
-  const [propertyType, setPropertyType] = useState();
+  const [propertyType, setPropertyType] = useState('Detached');
   const [numberOfRooms, setnumberOfRooms] = useState();
   const [balance, setBalance] = useState();
   const [qrCode, setQrCode] = useState("");
   const [Scan,setScan] = useState(false); 
-  const reader = useRef();
 
   const navigateToLogin = () => {
     navigate('/signin')
@@ -28,6 +27,10 @@ const Signup = () => {
 
   async function registerUser(e) {
     e.preventDefault();
+    console.log(numberOfRooms)
+    if(customerID === "" || password === "" || address === "" || numberOfRooms === "" || balance === "" ){
+      return alert("The form is incomplete");
+    }
 
     const res = await fetch('http://localhost:1337/api/register', {
       method: 'POST',
@@ -50,6 +53,10 @@ const Signup = () => {
     {
       alert("Account Successfully Registered..")
       navigate('/signin')
+    }else if(data.message === "Code Invalid"){
+      alert("Code is Invalid");
+    } else if(data.message === "Code Expired"){
+      alert("Code is Expired");
     } else {
       alert("There was an error!");
     }
@@ -80,8 +87,10 @@ const Signup = () => {
   }
 
   const handleCode = (e) => {
+    setQrCode(() => e.target.value)
     setBalance(() => e.target.value);
   }
+
 
 
   return (
@@ -125,7 +134,7 @@ const Signup = () => {
             if(res){
               setQrCode(res.text);
               setBalance(() => res.text);
-              setScan(false)
+              // setScan(false)
             } 
             if(err)
             {
@@ -134,7 +143,7 @@ const Signup = () => {
           }}/>) : <></>}
           </div>
        
-          <br/><button className='create-button scan-button' onClick={()=> Scan ? setScan(false) : setScan(true)}>{Scan ? "Stop Scanning" : "Scan Code"}</button>
+          <br/><button className='create-button scan-button' onClick={()=> Scan ? setScan(false) : setScan(true)} >{Scan ? "Stop Scanning" : "Scan Code"}</button>
         </div>
         <button onClick={registerUser} className='create-button'>Create Account</button>
         <p>Already have an account ? <span className='login-hover' onClick={navigateToLogin}><a>Log in</a></span></p>  
@@ -144,3 +153,5 @@ const Signup = () => {
 }
 
 export default Signup
+
+

@@ -1,0 +1,24 @@
+.bill-container {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid grey;
+    width: 30%;
+    height: 30vh;
+    padding: 2em;
+    align-items: baseline;
+    justify-content: space-around;
+    border-radius: 6px;
+    background-color: white;
+}
+
+.bill-outer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5em;
+}
+
+.background {
+    background-color: #eff0f3;
+    height: 100%;
+}
