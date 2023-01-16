@@ -42,6 +42,11 @@ async function payBill() {
 }
 
 const handlePayNow = () => {
+  if(outstanding === 0)
+  {
+    return alert("You don't have any outstanding amount to pay")
+  }
+
   if(balance< outstanding) {
     alert("Balance is low, please top up to pay the bill");
   } else {
