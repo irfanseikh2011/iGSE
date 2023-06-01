@@ -1,7 +1,8 @@
-import React, { useState  } from 'react'
+import React, { useState,useEffect  } from 'react'
 import './Signup.css'
 import {useNavigate } from 'react-router-dom'
 import { QrReader } from 'react-qr-reader'
+import './Error.css'
 
 
 
@@ -16,11 +17,30 @@ const Signup = () => {
   const [balance, setBalance] = useState();
   const [qrCode, setQrCode] = useState("");
   const [Scan,setScan] = useState(false); 
+  const [isMobile, setIsMobile] = useState(false);
+
+
 
   const navigateToLogin = () => {
     navigate('/signin')
   }
 
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      const isMobileDevice = window.matchMedia('(max-width: 1250px)').matches;
+      const isTouchEventSupported = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+      
+      setIsMobile(isMobileDevice && isTouchEventSupported);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
 
 
 
@@ -93,6 +113,21 @@ const Signup = () => {
 
   const openGithub = () => {
     window.open("https://github.com/irfanseikh2011/iGSE", "_blank");
+  }
+
+
+  if(isMobile){
+    return (
+      <div className="error-page">
+        <div className="error-container">
+          <h1 className="error-heading">Oops!</h1>
+          <p className="error-message">Mobile Device Detected.</p>
+          <p className="error-description">
+          Apologies for the inconvenience, but the site is not mobile-friendly. Please try again using a desktop.
+          </p>
+        </div>
+      </div>
+    );
   }
 
 
