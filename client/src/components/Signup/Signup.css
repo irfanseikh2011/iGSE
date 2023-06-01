@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.signup {
+    display: flex;
+    font-family: 'Poppins', sans-serif;
+}
+
+.bg {
+    background: url(../../../public/bg.jpg);
+    height: 100vh;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 50vw;
+}
+
+.signup-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50vw;
+    font-weight: 600;
+}
+
+.signup-input > input {
+    width: 600px;
+    height: 35px;
+    border: 0;
+    background: #EFF0F2;
+    padding-left: 10px;
+    margin-bottom:  20px ;
+    margin-top: 4px;
+}
+
+.create-button {
+    background: #007074;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 0.5em;
+    color: #ffff;
+    border: none;
+    margin-bottom: 0.5em;
+}
+
+.create-button:hover {
+    background: #015659;
+    cursor: pointer;
+}
+
+.login-hover {
+    color: #007074;
+    cursor: pointer;
+}
+
+.login-hover:hover {
+    text-decoration: underline;
+    color: #015659;
+}
+
+.heading-or {
+    margin-top: 3vh;
+}
+
+.social-button {
+    display: flex;
+    margin-top: 3vh;
+}
+
+.google-button{
+    font-size: 16px;
+}
+
+.github-button{
+    font-size: 16px;
+}
+
+.input-select {
+    padding: 0.5em;
+    padding-left: 18.5em;
+    padding-right: 18.5em;
+    background: #EFF0F2;
+    border: none;
+    color: rgb(90, 88, 88);
+}
+
+
+.signin-error-msg {
+    color: red;
+    font-size: 0.8rem;
+}
+
+
+.error-msg-hidden {
+    visibility: hidden;
+}
+
+
+.qrReader {
+    width: 100px;
+    height: 100px;
+}
+
+.hidden {
+    display: none;
+}
+
+
+.scan-button {
+    font-size: 13px;
+    margin-bottom: 4vh;
+    background: #02878c;
+}
