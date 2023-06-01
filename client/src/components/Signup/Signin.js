@@ -38,7 +38,7 @@ const Signin = () => {
           setSignInTry((prev) => prev + 1);
         }
 
-        if(data.userData.customerID === 'gse@shangrila.gov.un'){
+        if(data.userData.customerID === 'admin@igse.com'){
             navigate('/AdminDashboard',{state: {data: data.userData}});
         } else {
             navigate('/dashboard',{state: {data: data.userData}});
