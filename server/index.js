@@ -14,7 +14,7 @@ const db = require("./db");
 app.use(cors());
 app.use(express.json())
 
-require('dotenv').config();
+require('dotenv').config();  
 
 db.connect();
 
@@ -75,6 +75,9 @@ app.post('/api/login', async (req,res) => {
     const user = await User.findOne({
         customerID: req.body.customerID,
     })
+
+    if(!user)
+        return res.status(400).json({message:"User not found"});
 
     const isValidPass = await bcrypt.compare(req.body.password,user.password);
 
