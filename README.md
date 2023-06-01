@@ -6,6 +6,14 @@
 5. Start the server and the client by typing in npm start in both the terminal opened in [1][3]
 
 
+### `Sample Voucher Code for testing purposes`:
+38AKF8WQ
+C9MQX8V8
+0F1TRDNA
+PTBWSRUI
+QK44CPT4
+Z8FT83CH
+
 
 ### `Admin side view`:
 
