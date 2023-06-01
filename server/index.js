@@ -9,14 +9,19 @@ const Bill = require('./models/bill.model')
 const Rate = require('./models/rates.model');
 const QRCode = require('./models/qrcode.model');
 const { differenceInCalendarDays, parseISO } = require('date-fns');
+const db = require("./db");
 
 app.use(cors());
 app.use(express.json())
 
+require('dotenv').config();
+
+db.connect();
+
 // mongoose.set('debug', function (coll, method, query, doc) {
 //     console.log(coll + '.' + method, JSON.stringify(query), doc);
 //   });
-mongoose.connect('mongodb://localhost:27017/users')
+
 
 function generateCode() {
     var code = "";
@@ -54,6 +59,9 @@ app.post('/api/register', async (req,res) => {
         });
 
         const codes = await QRCode.findOneAndUpdate(ValidCode._id,{expired:true})
+
+        user.save();
+        codes.save();
 
         res.json({status:"ok",message:"Account Created."});
         console.log(user)
@@ -110,6 +118,8 @@ app.post('/api/submitreading', async (req,res) => {
                     gas: req.body.gas,
                     user: customer._id
                 })
+
+                bill.save();
                 res.json({status:"ok", message:"created"});
                 console.log(bill)
             }
@@ -122,6 +132,8 @@ app.post('/api/submitreading', async (req,res) => {
                 gas: req.body.gas,
                 user: customer._id
             })
+
+            bill.save();
             res.json({status:"ok", message:"created"});
             console.log(bill)
 
@@ -153,6 +165,9 @@ app.post('/api/topup', async (req,res) => {
                 }, {balance: AvailBalance})
 
                 const codes = await QRCode.findOneAndUpdate(ValidCode._id,{expired:true})
+
+                codes.save();
+                user.save();
                 res.json({status:"updated balance", data: user})
         } else {
             res.json({status:"Coupon Code is Invalid"});
@@ -200,20 +215,25 @@ app.post('/api/postRate', async(req,res) => {
                 gas : req.body.gas,
                 standingRate : req.body.standingRate
             })
+            prevRate.save();
             return res.json({status:"ok",message:"Created new rate", data:rate})
         } else {
         //    console.log(prevRate.dayRate)
             if(req.body.type === "day"){
                const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{dayRate : req.body.property})
+               rate.save();
                return res.json({status:"ok",message:"updated the rate",rates: rate})
             } else if(req.body.type === "night"){
                 const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{nightRate : req.body.property})
+                rate.save();
                 return res.json({status:"ok",message:"updated the rate",rates: rate})
             } else if(req.body.type === "gas"){
                 const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{gas : req.body.property})
+                rate.save();
                 return res.json({status:"ok",message:"updated the rate",rates: rate})
             } else {
                 const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{standingRate : req.body.property})
+                rate.save();
                 return res.json({status:"ok",message:"updated the rate",rates: rate})
             }
         }
@@ -230,6 +250,7 @@ app.post('/api/postDayRate', async(req,res) => {
 
         if(prevRate !== null){
                const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{dayRate : req.body.dayRate})
+               prevRate.save();
                return res.json({status:"ok",message:"updated the rate",rates: rate})
         }else {
             res.json({status:"ok", message: "No rates present"})
@@ -247,6 +268,7 @@ app.post('/api/postNightRate', async(req,res) => {
 
         if(prevRate !== null){
                const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{nightRate : req.body.nightRate})
+               prevRate.save();
                return res.json({status:"ok",message:"updated the rate",rates: rate})
         } else {
             res.json({status:"ok", message: "No rates present"})
@@ -264,6 +286,7 @@ app.post('/api/postGasRate', async(req,res) => {
 
         if(prevRate !== null){
                const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{gas : req.body.gas})
+               prevRate.save();
                return res.json({status:"ok",message:"updated the rate",rates: rate})
         }else {
             res.json({status:"ok", message: "No rates present"})
@@ -281,6 +304,7 @@ app.post('/api/postStandingRate', async(req,res) => {
 
         if(prevRate !== null){
                const rate = await Rate.findOneAndUpdate({_id: prevRate._id},{standingRate : req.body.standingRate})
+               prevRate.save();
                return res.json({status:"ok",message:"updated the rate",rates: rate})
         }else {
             res.json({status:"ok", message: "No rates present"})
@@ -323,6 +347,7 @@ app.put('/api/updateOustanding', async(req,res) => {
         const outstanding = day + night + gas + standing;
         const calculate = await User.findByIdAndUpdate(userId._id, {outstanding: outstanding});
 
+        userId.save();
         res.json({data: calculate})
 
     } catch (e) {
@@ -347,6 +372,8 @@ app.put('/api/paybill', async (req,res) => {
             const deleted = await Bill.deleteMany({ user: userId._id, _id: { $ne: bills[0].lastBill._id } })
             const updatedBalance =  Number.parseFloat(userId.balance - userId.outstanding).toFixed(2);
             const updatedUser = await User.findOneAndUpdate(userId._id, {outstanding: 0, balance: updatedBalance});
+
+            userId.save();
             res.json({status:"ok", message: updatedUser})
         }
 
@@ -373,6 +400,9 @@ app.post('/api/generateCode', async (req,res) => {
         const Code = await QRCode.create({
             code : qrCode,
         })
+
+        prevCode.save();
+
         res.json({status:"ok",message:"Created new qrCode", data:Code})
     } catch(e) {
         res.json({status:"Error",message:"Something went wrong"})
@@ -584,6 +614,21 @@ app.get('/api/getAllBills',async (req,res) => {
             return res.json({status:"ok", message: "Empty Directory"})
         }
     } catch (e) {
+        return res.json(e);
+    }
+})
+
+
+app.get('/api/getCodes', async (req,res) => {
+    try {
+        const codes = await QRCode.find({});
+        if(!codes)
+            return res.status(400).json({message: "No codes found"});
+        
+
+        console.log(codes)
+        return res.status(200).json(codes);
+    } catch(e) {
         return res.json(e);
     }
 })
