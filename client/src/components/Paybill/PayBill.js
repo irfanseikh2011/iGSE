@@ -9,7 +9,7 @@ const PayBill = ({data}) => {
   const customerID = data.customerID;
 
   async function getProfile(){
-    const res = await fetch(`http://localhost:1337/api/profile/${customerID}`, {
+    const res = await fetch(`https://igse-gfv8.onrender.com/api/profile/${customerID}`, {
         method: 'GET',
         headers: {
         'Content-Type' : 'application/json',
@@ -24,7 +24,7 @@ const PayBill = ({data}) => {
 
 async function payBill() {
   try{
-    const response = await fetch('http://localhost:1337/api/paybill', {
+    const response = await fetch('https://igse-gfv8.onrender.com/api/paybill', {
     method: 'PUT',
     headers: {
         'Content-Type' : 'application/json',

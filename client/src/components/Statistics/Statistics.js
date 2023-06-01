@@ -62,7 +62,7 @@ const Statistics = () => {
     };
 
     async function getPropertyCount(){
-        const res = await fetch('http://localhost:1337/igse/propertycount', {
+        const res = await fetch('https://igse-gfv8.onrender.com/igse/propertycount', {
               method: 'GET',
               headers: {
                 'Content-Type' : 'application/json',
@@ -124,7 +124,7 @@ const Statistics = () => {
 
 
     async function getCost(){
-        const res = await fetch(`http://localhost:1337/igse/${propertyType}/${rooms}`, {
+        const res = await fetch(`https://igse-gfv8.onrender.com/igse/${propertyType}/${rooms}`, {
             method: 'GET',
             headers: {
               'Content-Type' : 'application/json',

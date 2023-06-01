@@ -32,7 +32,7 @@ const Signup = () => {
       return alert("The form is incomplete");
     }
 
-    const res = await fetch('http://localhost:1337/api/register', {
+    const res = await fetch('https://igse-gfv8.onrender.com/api/register', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json',
@@ -91,6 +91,10 @@ const Signup = () => {
     setBalance(() => e.target.value);
   }
 
+  const openGithub = () => {
+    window.open("https://github.com/irfanseikh2011/iGSE", "_blank");
+  }
+
 
 
   return (
@@ -147,6 +151,7 @@ const Signup = () => {
         </div>
         <button onClick={registerUser} className='create-button'>Create Account</button>
         <p>Already have an account ? <span className='login-hover' onClick={navigateToLogin}><a>Log in</a></span></p>  
+        <h4>Don't have a Voucher code ? <span onClick={openGithub} className='login-hover'>Get it here</span></h4>
       </div>
     </div>
   )

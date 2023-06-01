@@ -11,7 +11,7 @@ const GenerateCode = () => {
 
   async function getCodes() {
     try {
-      const res = await fetch('http://localhost:1337/api/getCodes', {
+      const res = await fetch('https://igse-gfv8.onrender.com/api/getCodes', {
         method: 'GET',
         headers: {
           'Content-Type' : 'application/json',
@@ -30,7 +30,7 @@ const GenerateCode = () => {
 
     async function generate() {
         try{
-            const res = await fetch('http://localhost:1337/api/generateCode', {
+            const res = await fetch('https://igse-gfv8.onrender.com/api/generateCode', {
                 method: 'POST',
                 headers: {
                   'Content-Type' : 'application/json',
@@ -50,7 +50,7 @@ const GenerateCode = () => {
     }
 
     async function getActiveAndExpiry() {
-            const res = await fetch('http://localhost:1337/api/countCodes', {
+            const res = await fetch('https://igse-gfv8.onrender.com/api/countCodes', {
                 method: 'GET',
                 headers: {
                   'Content-Type' : 'application/json',
@@ -60,7 +60,7 @@ const GenerateCode = () => {
               const data = await res.json();
               setActive(() => data.count);
 
-              const exp = await fetch('http://localhost:1337/api/countExpiredCodes', {
+              const exp = await fetch('https://igse-gfv8.onrender.com/api/countExpiredCodes', {
                 method: 'GET',
                 headers: {
                   'Content-Type' : 'application/json',

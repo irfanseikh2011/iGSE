@@ -25,7 +25,7 @@ const MeterReading = ({data}) => {
       alert("Readings are empty, please fill in the form");
     }else{
       try {
-        const res = await fetch('http://localhost:1337/api/submitreading', {
+        const res = await fetch('https://igse-gfv8.onrender.com/api/submitreading', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json',
@@ -63,7 +63,7 @@ const MeterReading = ({data}) => {
 
   async function calculateOutstanding(){
     try{
-        const response = await fetch('http://localhost:1337/api/updateOustanding', {
+        const response = await fetch('https://igse-gfv8.onrender.com/api/updateOustanding', {
         method: 'PUT',
         headers: {
             'Content-Type' : 'application/json',

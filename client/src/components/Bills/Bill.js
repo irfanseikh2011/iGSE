@@ -12,7 +12,7 @@ const Bill = ({data}) => {
 
   async function getBill() {
     try {
-        const res = await fetch(`http://localhost:1337/api/getBill/${id}`, {
+        const res = await fetch(`https://igse-gfv8.onrender.com/api/getBill/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type' : 'application/json',
@@ -44,7 +44,7 @@ const Bill = ({data}) => {
 
   async function getOutstanding(){
     try {
-      const res = await fetch(`http://localhost:1337/api/profile/${id}`, {
+      const res = await fetch(`https://igse-gfv8.onrender.com/api/profile/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type' : 'application/json',
@@ -61,7 +61,7 @@ const Bill = ({data}) => {
 
   async function getRates() {
     try {
-        const res = await fetch('http://localhost:1337/api/getRates', {
+        const res = await fetch('https://igse-gfv8.onrender.com/api/getRates', {
           method: 'GET',
           headers: {
             'Content-Type' : 'application/json',

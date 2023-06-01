@@ -10,7 +10,7 @@ const ViewBills = () => {
 
   async function getBills(){
 
-    const res = await fetch('http://localhost:1337/api/getAllBills', {
+    const res = await fetch('https://igse-gfv8.onrender.com/api/getAllBills', {
       method: 'GET',
       headers: {
         'Content-Type' : 'application/json',

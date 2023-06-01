@@ -13,7 +13,7 @@ const Topup = ({data}) => {
     const customerID = data.customerID;
 
     async function getProfile(){
-        const res = await fetch(`http://localhost:1337/api/profile/${customerID}`, {
+        const res = await fetch(`https://igse-gfv8.onrender.com/api/profile/${customerID}`, {
             method: 'GET',
             headers: {
             'Content-Type' : 'application/json',
@@ -48,7 +48,7 @@ const Topup = ({data}) => {
         e.preventDefault();
 
         try{
-          const res = await fetch('http://localhost:1337/api/topup', {
+          const res = await fetch('https://igse-gfv8.onrender.com/api/topup', {
           method: 'POST',
           headers: {
             'Content-Type' : 'application/json',

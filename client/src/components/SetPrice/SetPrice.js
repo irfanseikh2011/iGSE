@@ -23,7 +23,7 @@ const SetPrice = () => {
 
 
     async function getRates(){
-            const res = await fetch('http://localhost:1337/api/getRates', {
+            const res = await fetch('https://igse-gfv8.onrender.com/api/getRates', {
               method: 'GET',
               headers: {
                 'Content-Type' : 'application/json',
@@ -41,7 +41,7 @@ const SetPrice = () => {
     //         return alert("Please enter the rate.")
     //     }
 
-    //     const res = await fetch('http://localhost:1337/api/postRate', {
+    //     const res = await fetch('https://igse-gfv8.onrender.com/api/postRate', {
     //         method: 'POST',
     //         headers: {
     //           'Content-Type' : 'application/json',
@@ -88,7 +88,7 @@ const SetPrice = () => {
             return alert("Please enter day rate before changing.")
         }
 
-        const res = await fetch('http://localhost:1337/api/postDayRate', {
+        const res = await fetch('https://igse-gfv8.onrender.com/api/postDayRate', {
             method: 'POST',
             headers: {
               'Content-Type' : 'application/json',
@@ -118,7 +118,7 @@ const SetPrice = () => {
 
 
         e.preventDefault();
-        const res = await fetch('http://localhost:1337/api/postNightRate', {
+        const res = await fetch('https://igse-gfv8.onrender.com/api/postNightRate', {
             method: 'POST',
             headers: {
               'Content-Type' : 'application/json',
@@ -148,7 +148,7 @@ const SetPrice = () => {
 
         e.preventDefault();
 
-        const res = await fetch('http://localhost:1337/api/postGasRate', {
+        const res = await fetch('https://igse-gfv8.onrender.com/api/postGasRate', {
             method: 'POST',
             headers: {
               'Content-Type' : 'application/json',
@@ -178,7 +178,7 @@ const SetPrice = () => {
         }
 
         e.preventDefault();
-        const res = await fetch('http://localhost:1337/api/postStandingRate', {
+        const res = await fetch('https://igse-gfv8.onrender.com/api/postStandingRate', {
             method: 'POST',
             headers: {
               'Content-Type' : 'application/json',

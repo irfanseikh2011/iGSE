@@ -17,7 +17,7 @@ const Signin = () => {
        async function loginUsers(e){
         e.preventDefault();
     
-        const res = await fetch('http://localhost:1337/api/login', {
+        const res = await fetch('https://igse-gfv8.onrender.com/api/login', {
           method: 'POST',
           headers: {
             'Content-Type' : 'application/json',
